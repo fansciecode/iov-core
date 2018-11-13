@@ -40,6 +40,8 @@ export enum TransactionKind {
 export interface BaseTx {
   readonly chainId: ChainId;
   readonly fee?: Amount;
+  readonly gasPrice?: Amount;
+  readonly gasLimit?: Amount;
   // signer needs to be a PublicKey as we use that to as an identifier to the Keyring for lookup
   readonly signer: PublicKeyBundle;
   readonly ttl?: TtlBytes;

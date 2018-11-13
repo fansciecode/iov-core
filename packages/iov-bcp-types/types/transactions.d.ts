@@ -26,6 +26,8 @@ export declare enum TransactionKind {
 export interface BaseTx {
     readonly chainId: ChainId;
     readonly fee?: Amount;
+    readonly gasPrice?: Amount;
+    readonly gasLimit?: Amount;
     readonly signer: PublicKeyBundle;
     readonly ttl?: TtlBytes;
 }
