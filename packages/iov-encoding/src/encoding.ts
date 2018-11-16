@@ -1,6 +1,9 @@
 import * as base64js from "base64-js";
 import * as bech32 from "bech32";
 import { ReadonlyDate } from "readonly-date";
+import * as rlp from "rlp";
+
+import { safeBufferValues } from "./safebufferhelpers";
 
 export class Encoding {
   public static toHex(data: Uint8Array): string {
@@ -154,6 +157,11 @@ export class Encoding {
     const ms = padded(date.getUTCMilliseconds(), 3);
 
     return `${year}-${month}-${day}T${hour}:${minute}:${second}.${ms}Z`;
+  }
+
+  public static toRlp(data: rlp.EncodeInput): Uint8Array {
+    const dataBuffer = rlp.encode(data);
+    return Uint8Array.from(safeBufferValues(dataBuffer));
   }
 
   private static isValidUtf8(data: Uint8Array): boolean {

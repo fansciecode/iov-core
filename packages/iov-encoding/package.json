@@ -33,7 +33,8 @@
     "base64-js": "^1.3.0",
     "bech32": "^1.1.3",
     "bn.js": "^4.11.8",
-    "readonly-date": "^1.0.0"
+    "readonly-date": "^1.0.0",
+    "rlp": "^2.1.0"
   },
   "devDependencies": {
     "@types/base64-js": "^1.2.5",

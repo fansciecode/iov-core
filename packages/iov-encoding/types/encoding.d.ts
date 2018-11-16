@@ -1,4 +1,5 @@
 import { ReadonlyDate } from "readonly-date";
+import * as rlp from "rlp";
 export declare class Encoding {
     static toHex(data: Uint8Array): string;
     static fromHex(hexstring: string): Uint8Array;
@@ -10,6 +11,7 @@ export declare class Encoding {
     static fromUtf8(data: Uint8Array): string;
     static fromRfc3339(str: string): ReadonlyDate;
     static toRfc3339(date: Date | ReadonlyDate): string;
+    static toRlp(data: rlp.EncodeInput): Uint8Array;
     private static isValidUtf8;
 }
 export declare class Bech32 {
