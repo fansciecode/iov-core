@@ -10,7 +10,6 @@ export declare class Encoding {
     static fromUtf8(data: Uint8Array): string;
     static fromRfc3339(str: string): ReadonlyDate;
     static toRfc3339(date: Date | ReadonlyDate): string;
-    static toRlp(data: any): Uint8Array;
     private static isValidUtf8;
 }
 export declare class Bech32 {
