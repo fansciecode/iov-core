@@ -158,8 +158,8 @@ export class Encoding {
 
     return `${year}-${month}-${day}T${hour}:${minute}:${second}.${ms}Z`;
   }
-
-  public static toRlp(data: rlp.EncodeInput): Uint8Array {
+  // data: rlp.EncodeInput error
+  public static toRlp(data: any): Uint8Array {
     const dataBuffer = rlp.encode(data);
     return Uint8Array.from(safeBufferValues(dataBuffer));
   }
