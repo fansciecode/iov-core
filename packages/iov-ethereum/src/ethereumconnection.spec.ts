@@ -9,6 +9,7 @@ import {
 import { Slip10RawIndex } from "@iov/crypto";
 import { Secp256k1HdWallet } from "@iov/keycontrol";
 
+import { pubkeyToAddress } from "./derivation";
 import { ethereumCodec } from "./ethereumcodec";
 import { EthereumConnection } from "./ethereumconnection";
 import { TestConfig } from "./testconfig";
@@ -111,8 +112,11 @@ describe("EthereumConnection", () => {
         tokenTicker: "ETH" as TokenTicker,
       },
     };
-
-    const signingJob = ethereumCodec.bytesToSign(sendTx, nonce);
+    const connection = await EthereumConnection.establish(base);
+    const senderAddress = pubkeyToAddress(mainIdentity.pubkey.data, true);
+    const query: BcpAccountQuery = { address: senderAddress as Address };
+    const nonceResp = await connection.getNonce(query);
+    const signingJob = ethereumCodec.bytesToSign(sendTx, nonceResp.data[0].nonce);
     const signature = await wallet.createTransactionSignature(
       mainIdentity,
       signingJob.bytes,
@@ -123,7 +127,7 @@ describe("EthereumConnection", () => {
     const signedTransaction: SignedTransaction = {
       transaction: sendTx,
       primarySignature: {
-        nonce: nonce,
+        nonce: nonceResp.data[0].nonce,
         pubkey: mainIdentity.pubkey,
         signature: signature,
       },
@@ -131,7 +135,6 @@ describe("EthereumConnection", () => {
     };
     const bytesToPost = ethereumCodec.bytesToPost(signedTransaction);
 
-    const connection = await EthereumConnection.establish(base);
     const result = await connection.postTx(bytesToPost);
     expect(result).toBeTruthy();
     expect(result.data.message).toBeNull();
