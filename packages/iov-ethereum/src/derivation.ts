@@ -1,6 +1,8 @@
+import { PublicKeyBytes } from "@iov/base-types";
 import { Address } from "@iov/bcp-types";
 import { Keccak256 } from "@iov/crypto";
 import { Encoding } from "@iov/encoding";
+import secp256k1 from "secp256k1";
 
 const { toAscii, toHex } = Encoding;
 
@@ -20,4 +22,15 @@ export function isValidAddress(address: string): boolean {
     return true;
   }
   throw new Error("Invalid ethereum address");
+}
+
+export function pubkeyToAddress(pubkey: PublicKeyBytes, sanitize: boolean): Address {
+  let pubKeyBuffer = Buffer.from(pubkey);
+  if (sanitize && pubKeyBuffer.length !== 64) {
+    pubKeyBuffer = secp256k1.publicKeyConvert(pubKeyBuffer, false).slice(1);
+  }
+  if (pubKeyBuffer.length !== 64) {
+    throw new Error("Invalid pubkey length");
+  }
+  return ("0x" + Encoding.toHex(new Keccak256(pubKeyBuffer).digest().slice(-20))) as Address;
 }
